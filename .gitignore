@@ -207,6 +207,6 @@ marimo/_lsp/
 __marimo__/
 
 # Dataset
-Coffee Bean.csv
+coffee_beans.csv
 test/
 train/
