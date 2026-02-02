@@ -1,37 +1,26 @@
-:root {
-  --coffee-dark: #3E2723;
-  --coffee-medium: #6D4C41;
-  --coffee-light: #D7CCC8;
-  --coffee-accent: #8D6E63;
-  --cream: #FDFBF7;
-  --green-bean: #558B2F;
-  --roast-dark: #212121;
-  --roast-light: #A1887F;
-  --roast-medium: #5D4037;
-  
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+@import "tailwindcss";
+
+@theme {
+  --color-coffee-900: #3C2F2F;
+  --color-coffee-800: #6F4E37;
+  --color-coffee-700: #8D6E63;
+  --color-coffee-400: #CC9B65;
+  --color-coffee-100: #EFEBE9;
+  --color-coffee-50: #FDFBF7;
+
+  --color-roast-dark: #212121;
+  --color-roast-medium: #5D4037;
+  --color-roast-light: #A1887F;
+  --color-roast-green: #558B2F;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+
+  --background-image-coffee-gradient: linear-gradient(135deg, #FDFBF7 0%, #EFEBE9 100%);
 }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--coffee-light);
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-  background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Clean fallback */
-  background: linear-gradient(to bottom right, #EFEBE9, #D7CCC8);
-  min-height: 100vh;
-  color: var(--coffee-dark);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-button {
-  cursor: pointer;
+@layer base {
+  body {
+    @apply font-sans text-coffee-900 bg-coffee-50;
+  }
 }
