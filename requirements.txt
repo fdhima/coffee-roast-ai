@@ -1,6 +1,7 @@
 notebook
 opencv-python
 fastapi[standard]
+scikit-learn
 python-multipart
 pandas
 numpy
