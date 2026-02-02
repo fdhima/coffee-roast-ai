@@ -3,7 +3,17 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 model = tf.keras.models.load_model("coffee_roast_model.keras")
 
 def preprocess_image(img):
