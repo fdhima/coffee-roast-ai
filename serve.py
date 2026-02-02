@@ -1,0 +1,31 @@
+from fastapi import FastAPI, UploadFile
+import tensorflow as tf
+import numpy as np
+from PIL import Image
+
+app = FastAPI()
+model = tf.keras.models.load_model("coffee_roast_model.keras")
+
+def preprocess_image(img):
+    img = tf.image.resize(img, (224, 224))
+    img = tf.cast(img, tf.float32) / 255.0
+    return img
+
+
+@app.get("/")
+def root():
+    return {"status": "CoffeeRoastAI is running ☕"}
+
+
+@app.post("/predict")
+async def predict(file: UploadFile):
+    image = Image.open(file.file).convert("RGB")
+    image = np.array(image)
+    image = preprocess_image(image)
+    image = tf.expand_dims(image, 0)
+
+    logits = model(image)
+    prediction = tf.argmax(logits, axis=1).numpy()[0]
+
+    return {"class": int(prediction)}
+

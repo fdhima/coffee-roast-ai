@@ -1,5 +1,7 @@
 notebook
 opencv-python
+fastapi[standard]
+python-multipart
 pandas
 numpy
 tensorflow-cpu
