@@ -210,3 +210,7 @@ __marimo__/
 coffee_beans.csv
 test/
 train/
+
+# UI UX Pro Max
+.shared/
+.agent/
