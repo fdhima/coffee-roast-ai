@@ -17,10 +17,22 @@
   --font-sans: "Inter", sans-serif;
 
   --background-image-coffee-gradient: linear-gradient(135deg, #FDFBF7 0%, #EFEBE9 100%);
+  --background-image-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
 }
 
 @layer base {
   body {
-    @apply font-sans text-coffee-900 bg-coffee-50;
+    @apply font-sans text-coffee-900 bg-coffee-50 bg-coffee-gradient antialiased selection:bg-coffee-400 selection:text-white;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply backdrop-blur-md bg-white/30 border border-white/40 shadow-xl;
+  }
+  
+  .glass-button {
+    @apply backdrop-blur-sm bg-coffee-800/90 text-white shadow-lg border border-white/10 hover:bg-coffee-900 transition-all duration-300;
   }
 }
