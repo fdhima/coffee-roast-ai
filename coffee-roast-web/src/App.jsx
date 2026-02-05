@@ -53,12 +53,10 @@ function App() {
     formData.append('file', image);
 
     try {
-      // Assuming backend is running on localhost:8000
-      const response = await fetch('http://localhost:8000/predict', {
+      const response = await fetch('/predict', {
         method: 'POST',
         body: formData,
       });
-
       if (!response.ok) {
         throw new Error('Failed to analyze image');
       }
