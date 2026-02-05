@@ -1,4 +1,7 @@
 from fastapi import FastAPI, UploadFile
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pathlib import Path
 import tensorflow as tf
 import numpy as np
 from PIL import Image
@@ -14,7 +17,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-model = tf.keras.models.load_model("coffee_roast_model.keras")
+
+frontend_path = Path(__file__).parent / "coffee-roast-web/dist"
+app.mount(
+    "/assets",
+    StaticFiles(directory=frontend_path / "assets"),
+    name="assets"
+)
+
+model = tf.keras.models.load_model(Path(__file__).parent / "coffee_roast_model.keras")
 
 def preprocess_image(img):
     img = tf.image.resize(img, (224, 224))
@@ -24,11 +35,11 @@ def preprocess_image(img):
 
 @app.get("/")
 def root():
-    return {"status": "CoffeeRoastAI is running ☕"}
+    return FileResponse(frontend_path / "index.html")
 
 
 @app.post("/predict")
-async def predict(file: UploadFile):
+def predict(file: UploadFile):
     image = Image.open(file.file).convert("RGB")
     image = np.array(image)
     image = preprocess_image(image)
