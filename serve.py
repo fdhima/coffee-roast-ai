@@ -15,6 +15,8 @@ os.environ["TF_NUM_INTEROP_THREADS"] = "1"
 import tensorflow as tf
 
 
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
 app = FastAPI()
 
 app.add_middleware(
@@ -26,13 +28,19 @@ app.add_middleware(
 )
 
 frontend_path = Path(__file__).parent / "coffee-roast-web/dist"
-app.mount(
-    "/assets",
-    StaticFiles(directory=frontend_path / "assets"),
-    name="assets"
-)
+if frontend_path.exists():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=frontend_path / "assets"),
+        name="assets"
+    )
+else:
+    print(f"Warning: Frontend path {frontend_path} does not exist. Static files will not be served.")
 
-model = tf.keras.models.load_model(Path(__file__).parent / "coffee_roast_model.keras")
+model = tf.keras.models.load_model(
+    Path(__file__).parent / "coffee_roast_model.keras",
+    custom_objects={'preprocess_input': preprocess_input}
+)
 
 def preprocess_image(img):
     img = tf.image.resize(img, (224, 224))
