@@ -25,6 +25,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+frontend_path = Path(__file__).parent / "coffee-roast-web/dist"
+app.mount(
+    "/assets",
+    StaticFiles(directory=frontend_path / "assets"),
+    name="assets"
+)
 
 model = tf.keras.models.load_model(Path(__file__).parent / "coffee_roast_model.keras")
 
@@ -32,6 +38,11 @@ def preprocess_image(img):
     img = tf.image.resize(img, (224, 224))
     img = tf.cast(img, tf.float32) / 255.0
     return img
+
+
+@app.get("/")
+def root():
+    return FileResponse(frontend_path / "index.html")
 
 
 @app.post("/predict")

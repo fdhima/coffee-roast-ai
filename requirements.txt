@@ -6,6 +6,6 @@ python-multipart
 pandas
 numpy
 tensorflow-cpu
-
+matplotlib
 Pillow
 gunicorn
