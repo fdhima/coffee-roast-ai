@@ -26,7 +26,6 @@ def preprocess_image(img):
     return img
 
 
-
 @app.post("/predict")
 def predict(file: UploadFile):
     image = Image.open(file.file).convert("RGB")
