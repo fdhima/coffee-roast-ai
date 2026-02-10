@@ -24,7 +24,9 @@ const CLASS_DESCRIPTIONS = {
 function App() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
   const [prediction, setPrediction] = useState(null);
+  const [confidence, setConfidence] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
@@ -35,6 +37,7 @@ function App() {
       setImage(file);
       setPreview(URL.createObjectURL(file));
       setPrediction(null);
+      setConfidence(null);
       setError(null);
     }
   };
@@ -63,6 +66,7 @@ function App() {
 
       const data = await response.json();
       setPrediction(data['class']);
+      setConfidence(data['confidence']);
     } catch (err) {
       console.error(err);
       setError("Could not connect to the analysis engine. Is the server running?");
@@ -75,6 +79,7 @@ function App() {
     setImage(null);
     setPreview(null);
     setPrediction(null);
+    setConfidence(null);
     setError(null);
   };
 
@@ -186,7 +191,7 @@ function App() {
                       <h2 className="text-5xl font-serif font-bold text-white shadow-sm">{CLASS_NAMES[prediction]}</h2>
                     </div>
                     <div className="text-4xl filter drop-shadow-lg animate-bounce-slow" title="Confidence">
-                      ✨
+                      {confidence ? <span className="text-3xl font-mono text-coffee-100">{Math.round(confidence * 100)}%</span> : '✨'}
                     </div>
                   </div>
                 </div>

@@ -37,14 +37,23 @@ if frontend_path.exists():
 else:
     print(f"Warning: Frontend path {frontend_path} does not exist. Static files will not be served.")
 
+
 model = tf.keras.models.load_model(
     Path(__file__).parent / "coffee_roast_model.keras",
     custom_objects={'preprocess_input': preprocess_input}
 )
 
+CLASS_NAMES = {
+    0: "Dark",
+    1: "Green",
+    2: "Light",
+    3: "Medium"
+}
+
 def preprocess_image(img):
     img = tf.image.resize(img, (224, 224))
-    img = tf.cast(img, tf.float32) / 255.0
+    # IMPORTANT: Removed division by 255.0 to match training preprocessing
+    # The model expects [0, 255] range inputs for MobileNetV2 preprocessing
     return img
 
 
@@ -54,14 +63,26 @@ def root():
 
 
 @app.post("/predict")
-def predict(file: UploadFile):
+async def predict(file: UploadFile):
     image = Image.open(file.file).convert("RGB")
     image = np.array(image)
+    
+    # Preprocess
     image = preprocess_image(image)
     image = tf.expand_dims(image, 0)
 
+    # Predict
     logits = model(image)
-    prediction = tf.argmax(logits, axis=1).numpy()[0]
-
-    return {"class": int(prediction)}
+    probs = tf.nn.softmax(logits, axis=-1).numpy()[0]
+    
+    pred_idx = np.argmax(probs)
+    pred_label = CLASS_NAMES[pred_idx]
+    confidence = float(probs[pred_idx])
+    
+    # Return extended response
+    return {
+        "class": int(pred_idx),
+        "label": pred_label,
+        "confidence": confidence
+    }
 
