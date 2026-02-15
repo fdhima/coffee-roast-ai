@@ -72,7 +72,10 @@ async def predict(file: UploadFile):
     image = tf.expand_dims(image, 0)
 
     # Predict
-    logits = model(image)
+    # Use model.predict to ensure inference mode (fixing discrepancy with notebook)
+    logits = model.predict(image, verbose=0)
+    # logits is a numpy array, so no need for .numpy() after softmax if we use tf.nn.softmax
+    # or just use scipy/numpy softmax, but let's stick to tf for consistency with previous code
     probs = tf.nn.softmax(logits, axis=-1).numpy()[0]
     
     pred_idx = np.argmax(probs)
