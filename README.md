@@ -65,6 +65,25 @@ A machine learning project that classifies the roast level of coffee beans using
 
     The web application will effectively run at the URL provided in the terminal (usually `http://localhost:5173`).
 
+
+## Docker Setup
+
+You can also run the application using Docker. This will build both the frontend and backend into a single container.
+
+1.  **Build the Docker Image**
+
+    ```bash
+    docker build -t coffee-roast-app .
+    ```
+
+2.  **Run the Container**
+
+    ```bash
+    docker run -p 8000:8000 coffee-roast-app
+    ```
+
+    The application will be available at `http://localhost:8000`.
+
 ## Dataset
 
 The dataset used for training the model is available in the `coffee_beans.csv` file. The dataset is split into a training set and a test set, with the training set containing 80% of the data and the test set containing 20% of the data.
